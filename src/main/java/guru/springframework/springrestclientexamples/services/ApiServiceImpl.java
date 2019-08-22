@@ -4,22 +4,33 @@ import java.util.List;
 
 import guru.springframework.api.domain.User;
 import guru.springframework.api.domain.UserData;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class ApiServiceImpl implements ApiService {
 
     private final RestTemplate restTemplate;
 
-    public ApiServiceImpl(RestTemplate restTemplate) {
+    private final String api_url;
+
+    public ApiServiceImpl(RestTemplate restTemplate, @Value("${api.url}")String api_url) {
         this.restTemplate = restTemplate;
+        this.api_url = api_url;
     }
 
     @Override
     public List<User> getUsers(Integer limit) {
 
-        UserData userData = restTemplate.getForObject("http://private-anon-a4e9684223-apifaketory.apiary-mock.com/api/user?limit=" + limit, UserData.class);
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(api_url)
+                .queryParam("limit", limit);
+
+        System.out.println("--- " + uriBuilder.toUriString());
+
+        UserData userData = restTemplate.getForObject(uriBuilder.toUriString(), UserData.class);
         return userData.getData();
     }
 }
