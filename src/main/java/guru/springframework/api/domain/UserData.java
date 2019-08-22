@@ -3,13 +3,13 @@ package guru.springframework.api.domain;
 import java.util.List;
 
 public class UserData {
-    List<User> user;
+    List<User> data;
 
-    public List<User> getUser() {
-        return user;
+    public List<User> getData() {
+        return data;
     }
 
-    public void setUser(List<User> user) {
-        this.user = user;
+    public void setData(List<User> data) {
+        this.data = data;
     }
 }
